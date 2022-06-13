@@ -11,7 +11,7 @@ build:
     paths:
       - target/*.jar
   only:
-    - main
+    - master
 docker build:
   services:
     - docker:19.03.13-dind
@@ -22,7 +22,7 @@ docker build:
     - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
     - docker push $DOCKER_REPO:latest
   only:
-    - main
+    - master
 deploy:
   image: ubuntu:latest
   stage: deploy
@@ -37,4 +37,4 @@ deploy:
     - pwd
     - ssh ubuntu@$SERVER "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io; docker stop $APP_NAME; docker system prune -a -f; docker pull $DOCKER_REPO:latest; docker-compose up -d; docker logout"
   only:
-    - main
+    - master
